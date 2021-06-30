@@ -14,10 +14,10 @@ ReactDOM.render(
   <Router>
     <Switch>
       <Route exact path = "/">
-        <LoginPage />
-      </Route>
-      <Route exact path = "/RegistrationPage">
         <RegistrationPage />
+      </Route>
+      <Route exact path = "/LoginPage">
+        <LoginPage />
       </Route>
       <Route exact path = "/NewsFeed">
         <NewsFeed />
