@@ -15,6 +15,7 @@ export default function NewsFeed() {
     const [text, setText] = useState("")
     const [postImg, setPostImg] = useState("")
     const [users, setUsers] = useState([])
+    const [likes, setLikes] = useState(0)
 
     useEffect(() => {
         db.collection('usersData').onSnapshot(snapshot => {
@@ -31,7 +32,7 @@ export default function NewsFeed() {
                 <div class="card-body">
                     <p class="card-title"><strong>{user.name}</strong></p>
                     <p class="card-text">{user.postText}</p>
-                    <button type="button" class="btn btn-primary">Like</button>
+                    <button onClick={() => {setLikes(likes+1); db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
                 </div>
             </div>
         </div>
@@ -47,18 +48,25 @@ export default function NewsFeed() {
         setButton((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Upload</button>))
     };
 
-    var submitHandler = (e) => {
+    var submitHandler = async (e) => {
         e.preventDefault()
-        db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").set({
+        await db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").set({
             name: "currentUser",
             fileUrl: postImg,
-            postText: text
+            postText: text,
+            likes: likes
         })
-        //window.location.replace("/NewsFeed");
+        window.location.replace("/NewsFeed");
     }
 
     var handleTextChange = (e) => {
         setText(e.target.value)
+    }
+
+    var handleLike = () => {
+        alert("liked")
+        setLikes(likes+1)
+        db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})
     }
 
     return (
