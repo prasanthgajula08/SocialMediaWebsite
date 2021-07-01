@@ -2,17 +2,24 @@ import React from 'react'
 import fire from '../config/fire'
 
 function SignUp(props) {
-    const signUpHandler = (event) => {
+    const db = fire.firestore()
+
+    const signUpHandler = async (event) => {
         event.preventDefault()
-        fire.auth().createUserWithEmailAndPassword(event.target.usernameInput.value, event.target.passwordInput.value)
+        await fire.auth().createUserWithEmailAndPassword(event.target.usernameInput.value, event.target.passwordInput.value)
+        await db.collection('usersData').doc(event.target.usernameInput.value).set({
+            username: event.target.usernameInput.value,
+            posts: 0
+        })
+       
             .then((u) => {
               console.log('Successfully Signed Up');
+              window.location.replace("/UserProfile")
             })
             .catch((err) => {
               alert(err.toString());
               console.log('Error: ' + err.toString());
             })
-            
         }
 
     return (

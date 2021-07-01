@@ -20,21 +20,16 @@ export default function LoginPage() {
     }
 
 
-  const validateUserInput = () => {
-      
-        fire.auth().signInWithEmailAndPassword(userName,password)
-          .then((u) => {
-            console.log('Successfully Logged In');
-          })
-          .catch((err) => {
-            alert(err.toString());
-            console.log('Error: ' + err.toString());
-          })
+  const validateUserInput = async (event) => {
+        event.preventDefault();
+        await fire.auth().signInWithEmailAndPassword(userName,password)
+        console.log('Successfully Logged In');
+        window.location.replace('/UserProfile');
       }
 
     return (
         <div>
-        <form action="/NewsFeed">
+        <form /*action="/NewsFeed"*/>
             <h3>Login</h3>
 
             <div className="form-group">
@@ -54,7 +49,7 @@ export default function LoginPage() {
                 </div>
             </div> */}
 
-           <button onClick={validateUserInput} type="submit" className="btn btn-primary btn-block">Submit</button>
+           <button onClick={validateUserInput} className="btn btn-primary btn-block">Submit</button>
             <p className="forgot-password text-right">
                 Forgot <a href="#">password?</a>
             </p>

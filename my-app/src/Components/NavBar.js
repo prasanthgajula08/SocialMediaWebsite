@@ -1,6 +1,14 @@
 import React from 'react';
+import fire from '../config/fire';
 
 export default function NavBar() {
+
+   const signOutHandler = async () =>{
+        await fire.auth().signOut();
+        console.log("Signed out")
+        window.location.replace("/");
+    }
+
     return (
         <div class="shadow p-3 mb-5 bg-white rounded">
             <nav style={{height:"54px"}} class="navbar navbar-expand-lg">
@@ -26,7 +34,7 @@ export default function NavBar() {
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="/UserProfile">My Profile</a></li>
-                                <li><a class="dropdown-item" href="/">Signout</a></li>
+                                <li><a class="dropdown-item" onClick={signOutHandler} /* href="/LoginPage"*/>Signout</a></li>
                             </ul>
                             </li>
                         </ul>

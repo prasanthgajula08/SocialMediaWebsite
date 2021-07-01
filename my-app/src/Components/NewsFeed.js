@@ -10,29 +10,39 @@ export default function NewsFeed() {
         alignItems: 'center'
     }
 
+    var postNumber = 0
     const db = fire.firestore()
+    const [userFields, setuserFields] = useState({})
     const [button, setButton] = useState((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
     const [text, setText] = useState("")
     const [postImg, setPostImg] = useState("")
     const [users, setUsers] = useState([])
-    const [likes, setLikes] = useState()
+
+    const [username, setUserName] = useState("prasanth080898@gmail.com")
 
     useEffect(() => {
-        db.collection('usersData').onSnapshot(snapshot => {
-            setUsers(snapshot.docs.map(doc => doc.data()))
-        })
+        fire.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                setUserName(fire.auth().currentUser.email)
+            } else {
+              console.log("user signedout")
+            }
+          });
+          db.collection('usersData').doc(username).collection("posts").onSnapshot(snapshot => {
+             setUsers(snapshot.docs.map(doc => doc.data()))
+         })
     }, [])
 
     var jsxFiles = users.map((user) => {
-        return (
+     return (
         <div>
             <br></br>
             <div class="card" style={{width: '40rem'}}>
-                <img src={user.fileUrl} class="card-img-top" />
+                <img src={user.fileURL} class="card-img-top" />
                 <div class="card-body">
-                    <p class="card-title"><strong>{user.name}</strong></p>
-                    <p class="card-text">{user.postText}</p>
-                    <button onClick={() => {db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: user.likes+1})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
+                    <p class="card-title"><strong>{username}</strong></p>
+                    <p class="card-text">{user.postDescription}</p>
+                    <button onClick={() => {user.update({likes: user.likes+1})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
                 </div>
             </div>
         </div>
@@ -50,23 +60,21 @@ export default function NewsFeed() {
 
     var submitHandler = async (e) => {
         e.preventDefault()
-        await db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").set({
-            name: "currentUser",
-            fileUrl: postImg,
-            postText: text,
-            likes: likes
+        // db.collection('usersData').onSnapshot(snapshot => {
+        //     setuserFields(snapshot.doc(username).data())
+        // })
+        // postNumber = userFields.posts
+        await db.collection('usersData').doc(username).collection('posts').doc("0").set({
+            fileURL : postImg,
+            postDescription: text,
+            likes: 0,
+            comments: {}
         })
         window.location.replace("/NewsFeed");
     }
 
     var handleTextChange = (e) => {
         setText(e.target.value)
-    }
-
-    var handleLike = () => {
-        alert("liked")
-        setLikes(likes+1)
-        db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})
     }
 
     return (
