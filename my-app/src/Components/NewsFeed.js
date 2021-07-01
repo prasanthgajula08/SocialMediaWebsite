@@ -15,7 +15,7 @@ export default function NewsFeed() {
     const [text, setText] = useState("")
     const [postImg, setPostImg] = useState("")
     const [users, setUsers] = useState([])
-    const [likes, setLikes] = useState(0)
+    const [likes, setLikes] = useState()
 
     useEffect(() => {
         db.collection('usersData').onSnapshot(snapshot => {
@@ -32,7 +32,7 @@ export default function NewsFeed() {
                 <div class="card-body">
                     <p class="card-title"><strong>{user.name}</strong></p>
                     <p class="card-text">{user.postText}</p>
-                    <button onClick={() => {setLikes(likes+1); db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
+                    <button onClick={() => {db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: user.likes+1})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
                 </div>
             </div>
         </div>
