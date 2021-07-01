@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import NavBar from './NavBar'
+import fire from '../config/fire';
 
 export default function NewsFeed() {
     const articleStyle = {
@@ -38,7 +39,7 @@ export default function NewsFeed() {
                         </div>
                         <div class="col-6">
                             <div class= "row">
-                                <h2 style={{fontSize: "28px"}}>userName</h2>
+                                <h2 style={{fontSize: "28px"}}>{fire.auth().currentUser}</h2>
                             </div>
                             <div class= "row">
                                 <ul style={{listStyleType: "none"}}>
