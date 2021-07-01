@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import db from './firebase'
+import fire from '../config/fire';
 
 export default function LoginPage() {
 
@@ -18,36 +18,23 @@ export default function LoginPage() {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value)
     }
-    
-    const validateUserInput = (event) => {
-        event.preventDefault()
-        // console.log(userName,password)
-        // db.collection('users').onSnapshot(snapshot => {
-        //     console.log(snapshot.docs.map(doc => doc.data()))
-        // })
-        var docRef = db.collection("users").doc(userName);
 
-        docRef.get().then((doc) => {
-            if (doc.exists) {
-                if (doc.data().password === password){
-                    console.log("Password correct")
-                    window.location.replace("/NewsFeed");
-                }
-                else{
-                    console.log("Password incorrect")
-                }
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("User doesn't exist");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-    }
+
+  const validateUserInput = () => {
+      
+        fire.auth().signInWithEmailAndPassword(userName,password)
+          .then((u) => {
+            console.log('Successfully Logged In');
+          })
+          .catch((err) => {
+            alert(err.toString());
+            console.log('Error: ' + err.toString());
+          })
+      }
 
     return (
         <div>
-        <form>
+        <form action="/NewsFeed">
             <h3>Login</h3>
 
             <div className="form-group">
