@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar'
+import firebaseApp from './firebase'
 
 export default function NewsFeed() {
     const articleStyle = {
@@ -10,39 +10,64 @@ export default function NewsFeed() {
         alignItems: 'center'
     }
 
-    var files = ["https://picsum.photos/614/614","https://picsum.photos/614/650","https://picsum.photos/614/655","https://picsum.photos/614/660","https://picsum.photos/614/665"]
-    var jsxFiles = files.map((file) => {
+    const db = firebaseApp.firestore()
+    const [button, setButton] = useState((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
+    const [text, setText] = useState("")
+    const [postImg, setPostImg] = useState("")
+    const [users, setUsers] = useState([])
+    const [likes, setLikes] = useState(0)
+
+    useEffect(() => {
+        db.collection('usersData').onSnapshot(snapshot => {
+            setUsers(snapshot.docs.map(doc => doc.data()))
+        })
+    }, [])
+
+    var jsxFiles = users.map((user) => {
         return (
         <div>
             <br></br>
             <div class="card" style={{width: '40rem'}}>
-                <img src={file} class="card-img-top" />
+                <img src={user.fileUrl} class="card-img-top" />
                 <div class="card-body">
-                    <p class="card-title"><strong>UserName</strong></p>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button type="button" class="btn btn-primary">Like</button>
+                    <p class="card-title"><strong>{user.name}</strong></p>
+                    <p class="card-text">{user.postText}</p>
+                    <button onClick={() => {setLikes(likes+1); db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
                 </div>
             </div>
         </div>
         )
     });
 
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    var onChangeHandler = (e) => {
-        setSelectedFile(e.target.files[0]);
+    var onChangeHandler = async (e) => {
+        const file = e.target.files[0]
+        const storageRef = firebaseApp.storage().ref()
+        const fileRef = storageRef.child(file.name)
+        await fileRef.put(file)
+        setPostImg(await fileRef.getDownloadURL())
+        setButton((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Upload</button>))
     };
 
-    var onClickHandler = () => {
-        const data = new FormData()
-        data.append('file', selectedFile)
-        axios.post("http://localhost:3000/upload", data, { 
-            // receive two    parameter endpoint url ,form data
+    var submitHandler = async (e) => {
+        e.preventDefault()
+        await db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").set({
+            name: "currentUser",
+            fileUrl: postImg,
+            postText: text,
+            likes: likes
         })
-        .then(res => { // then print response status
-            console.log(res.statusText)
-        })
-    };
+        window.location.replace("/NewsFeed");
+    }
+
+    var handleTextChange = (e) => {
+        setText(e.target.value)
+    }
+
+    var handleLike = () => {
+        alert("liked")
+        setLikes(likes+1)
+        db.collection('usersData').doc("7sVvE8jwbu6NgKJsudWU").update({likes: likes})
+    }
 
     return (
         <div>
@@ -50,14 +75,16 @@ export default function NewsFeed() {
             <div style={articleStyle}>
             <br></br>
                 <div class="card" style={{width: '40rem'}}>
-                    <div class="input-group">
-                        <span class="input-group-text">Write Something...</span><br></br><br></br>
-                        <textarea class="form-control" aria-label="With textarea"></textarea>
-                    </div>
-                    <div class="input-group">
-                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onChange={onChangeHandler}/>
-                        <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onClick={onClickHandler}>Upload</button>
-                    </div>
+                    <form onSubmit={submitHandler}>
+                        <div class="input-group">
+                            <span class="input-group-text">Write Something...</span><br></br><br></br>
+                            <textarea class="form-control" aria-label="With textarea" onChange={handleTextChange}></textarea>
+                        </div>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onChange={onChangeHandler}/>
+                            {button}
+                        </div>
+                    </form>
                 </div>
                 {jsxFiles}
             </div>
