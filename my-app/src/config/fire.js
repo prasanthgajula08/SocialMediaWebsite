@@ -1,6 +1,7 @@
-import firebase from "firebase";
+  
+import firebase from 'firebase';
 
-const firebaseApp = firebase.initializeApp({
+const config = {
     apiKey: "AIzaSyAxeUUn4T7UzfDROJv5AnCIBlePApJXKaI",
     authDomain: "socialmediaapp-f8c7e.firebaseapp.com",
     projectId: "socialmediaapp-f8c7e",
@@ -8,6 +9,7 @@ const firebaseApp = firebase.initializeApp({
     messagingSenderId: "331178318299",
     appId: "1:331178318299:web:795932875b9d014263effe",
     measurementId: "G-0HDBFDD5ZY"
-});
+};
 
-export default firebaseApp;
+const fire = firebase.initializeApp(config);
+export default fire;

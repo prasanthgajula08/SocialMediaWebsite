@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar'
-import firebaseApp from './firebase'
+import fire from '../config/fire'
 
 export default function NewsFeed() {
     const articleStyle = {
@@ -10,7 +10,7 @@ export default function NewsFeed() {
         alignItems: 'center'
     }
 
-    const db = firebaseApp.firestore()
+    const db = fire.firestore()
     const [button, setButton] = useState((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
     const [text, setText] = useState("")
     const [postImg, setPostImg] = useState("")
@@ -41,7 +41,7 @@ export default function NewsFeed() {
 
     var onChangeHandler = async (e) => {
         const file = e.target.files[0]
-        const storageRef = firebaseApp.storage().ref()
+        const storageRef = fire.storage().ref()
         const fileRef = storageRef.child(file.name)
         await fileRef.put(file)
         setPostImg(await fileRef.getDownloadURL())
