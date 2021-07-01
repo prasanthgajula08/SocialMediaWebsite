@@ -1,8 +1,8 @@
 import React from 'react'
 import fire from '../config/fire'
 
-function signUpDummy(props) {
-    const signUp = (event) => {
+function SignUp(props) {
+    const signUpHandler = (event) => {
         event.preventDefault()
         fire.auth().createUserWithEmailAndPassword(event.target.usernameInput.value, event.target.passwordInput.value)
             .then((u) => {
@@ -17,7 +17,7 @@ function signUpDummy(props) {
 
     return (
         <div>
-            <form onSubmit={signUp}>
+            <form onSubmit={signUpHandler}>
                 <h3>signup</h3>
 
                 <div className="form-group">
@@ -49,4 +49,4 @@ function signUpDummy(props) {
     )
 }
 
-export default signUpDummy
+export default SignUp;

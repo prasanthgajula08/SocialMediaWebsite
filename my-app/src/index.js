@@ -2,20 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-// import RegistrationPage from './Components/RegistrationPage'
 import LoginPage from './Components/LoginPage'
 import NewsFeed from './Components/NewsFeed';
 import Chat from './Components/Chat';
 import UserProfile from './Components/UserProfile';
 import UserChat from './Components/UserChat';
-import SignUpDummy from './Components/signUpDummy';
+import SignUp from './Components/SignUp';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 ReactDOM.render(
   <Router>
     <Switch>
       <Route exact path = "/">
-        <SignUpDummy />
+        <SignUp />
       </Route>
       <Route exact path = "/LoginPage">
         <LoginPage />
