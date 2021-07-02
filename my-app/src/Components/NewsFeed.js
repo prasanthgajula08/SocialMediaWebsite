@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar'
 import fire from '../config/fire'
+import firebase from 'firebase';
 
 export default function NewsFeed() {
     const articleStyle = {
@@ -10,44 +11,61 @@ export default function NewsFeed() {
         alignItems: 'center'
     }
 
-    var postNumber = 0
+    var docRef;
     const db = fire.firestore()
-    const [userFields, setuserFields] = useState({})
     const [button, setButton] = useState((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
     const [text, setText] = useState("")
     const [postImg, setPostImg] = useState("")
     const [users, setUsers] = useState([])
-
-    const [username, setUserName] = useState("prasanth080898@gmail.com")
+    const [jsxFiles, setJsxFiles] = useState()
+    const [username, setUserName] = useState("")
 
     useEffect(() => {
-        fire.auth().onAuthStateChanged(function(user) {
+        // db.collection('usersData').doc(username)
+        fire.auth().onAuthStateChanged(async function(user) {
             if (user) {
-                setUserName(fire.auth().currentUser.email)
+                await setUserName(fire.auth().currentUser.email)
+                console.log(username)
+                db.collection('usersData').doc(username).collection("posts").onSnapshot(async snapshot => {
+                    await setUsers(snapshot.docs.map(doc => doc.data()))
+                })
+                  docRef = db.collection("usersData").doc(username);
+        
+                  docRef.get().then(async (doc) => {
+                      if (doc.exists) {
+                          console.log(doc.data().posts)
+                          await setJsxFiles(users.map((user) => {
+                            if (doc.data().posts>0) {
+                                return (
+                                    <div>
+                                        <br></br>
+                                        <div class="card" style={{width: '40rem'}}>
+                                            <img src={user.fileURL} class="card-img-top" />
+                                            <div class="card-body">
+                                                <p class="card-title"><strong>{username}</strong></p>
+                                                <p class="card-text">{user.postDescription}</p>
+                                                <button onClick={() => {user.update({likes: user.likes+1})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    )
+                            }
+                            else{
+                                return (<div></div>)
+                            }
+                        }))
+                      } else {
+                          // doc.data() will be undefined in this case
+                          console.log("No such document!");
+                      }
+                  }).catch((error) => {
+                      console.log("Error getting document:", error);
+                  });
             } else {
               console.log("user signedout")
             }
           });
-          db.collection('usersData').doc(username).collection("posts").onSnapshot(snapshot => {
-             setUsers(snapshot.docs.map(doc => doc.data()))
-         })
     }, [])
-
-    var jsxFiles = users.map((user) => {
-     return (
-        <div>
-            <br></br>
-            <div class="card" style={{width: '40rem'}}>
-                <img src={user.fileURL} class="card-img-top" />
-                <div class="card-body">
-                    <p class="card-title"><strong>{username}</strong></p>
-                    <p class="card-text">{user.postDescription}</p>
-                    <button onClick={() => {user.update({likes: user.likes+1})}} type="button" class="btn btn-primary">Like ({user.likes})</button>
-                </div>
-            </div>
-        </div>
-        )
-    });
 
     var onChangeHandler = async (e) => {
         const file = e.target.files[0]
@@ -59,16 +77,15 @@ export default function NewsFeed() {
     };
 
     var submitHandler = async (e) => {
+        console.log(username, jsxFiles)
         e.preventDefault()
-        // db.collection('usersData').onSnapshot(snapshot => {
-        //     setuserFields(snapshot.doc(username).data())
-        // })
-        // postNumber = userFields.posts
-        await db.collection('usersData').doc(username).collection('posts').doc("0").set({
+        db.collection('usersData').doc(username).collection('posts').doc("0").set({
             fileURL : postImg,
             postDescription: text,
             likes: 0,
-            comments: {}
+        })
+        await db.collection('usersData').doc(username).update({
+            posts: firebase.firestore.FieldValue.increment(1)
         })
         window.location.replace("/NewsFeed");
     }
