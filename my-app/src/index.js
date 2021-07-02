@@ -8,6 +8,7 @@ import Chat from './Components/Chat';
 import UserProfile from './Components/UserProfile';
 import UserChat from './Components/UserChat';
 import SignUp from './Components/SignUp';
+import DummyPrasanth from './Components/dummyPrasanth';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 ReactDOM.render(
@@ -20,7 +21,7 @@ ReactDOM.render(
         <LoginPage />
       </Route>
       <Route exact path = "/NewsFeed">
-        <NewsFeed />
+        
       </Route>
       <Route exact path = "/Chat">
         <Chat />
