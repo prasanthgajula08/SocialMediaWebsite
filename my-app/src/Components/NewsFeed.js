@@ -37,19 +37,24 @@ export default function NewsFeed() {
         }
     }, [user ,db])
 
-    // useEffect(() => {
-    //     db.collection('usersData').onSnapshot(snapshot => {
-    //         setUsers(snapshot.docs.map(doc => doc.data()))
-    //     })
-    // }, [])
+    useEffect(() => {
+        const clearUsersOp = db.collection('usersData').onSnapshot(snapshot => {
+            setUsers(snapshot.docs.map(doc => doc.data().username))
+        })
 
-    // useEffect(() => {
-    //     setNewsFeedPosts(users.map((usr)=>{
-    //         usr.collection('posts').onSnapshot(snpsht => {
-    //             snpsht.docs.map(dc => dc.data())
-    //         })
-    //     }))
-    // }, [users])
+        return () => {
+            clearUsersOp()
+        }
+    }, [])
+
+    useEffect(() => {
+        setNewsFeedPosts(users.map((usr)=>{
+            db.collection('usersData').doc(usr).collection('posts').onSnapshot(snpsht => {
+                snpsht.docs.map(dc => dc.data())
+            })
+        }))
+        console.log(newsFeedPosts)
+    }, [users])
 
     useEffect(() => {
         setPostCards(newsFeedPosts.map((post) => {
