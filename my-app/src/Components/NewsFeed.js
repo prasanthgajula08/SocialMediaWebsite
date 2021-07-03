@@ -19,7 +19,7 @@ export default function NewsFeed() {
     const [postCards, setPostCards] = useState([])
 
     useEffect(() => {
-        const clearAuth =fire.auth().onAuthStateChanged(function(authUser) {
+        const clearAuth = fire.auth().onAuthStateChanged(function(authUser) {
             if (authUser) {
                 setUser(authUser)
                 console.log(authUser)
@@ -38,31 +38,33 @@ export default function NewsFeed() {
     }, [user ,db])
 
     useEffect(() => {
-        const clearUsersOp = db.collection('usersData').onSnapshot(snapshot => {
+        db.collection('usersData').onSnapshot(snapshot => {
             setUsers(snapshot.docs.map(doc => doc.data().username))
         })
-
-        return () => {
-            clearUsersOp()
-        }
     }, [])
 
     useEffect(() => {
-        setNewsFeedPosts(users.map((usr)=>{
+        var usersData = []
+        users.map((usr)=>{
             db.collection('usersData').doc(usr).collection('posts').onSnapshot(snpsht => {
-                snpsht.docs.map(dc => dc.data())
+                snpsht.docs.map(dc => usersData.push(dc.data()))
             })
-        }))
+        })
+        console.log(usersData)
+        setNewsFeedPosts(usersData)
         console.log(newsFeedPosts)
-    }, [users])
+    }, [users, db])
 
     useEffect(() => {
-        setPostCards(newsFeedPosts.map((post) => {
+        console.log(newsFeedPosts)
+        setPostCards(newsFeedPosts.map((newsFeedPost) => {
+            console.log("tada")
             return (
-                <PostCard fileURL={post.fileURL} username="Prasanth Gajula" postDescription={post.postDescription} likes="500"/>
+                <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
             )
         }))
-    }, [newsFeedPosts ,db])
+        console.log("what up")
+    }, [/*postCards ,*/newsFeedPosts ,db])
 
     var handleFileChange = async (e) => {
         const file = e.target.files[0]
@@ -98,7 +100,12 @@ export default function NewsFeed() {
             <div className="userProfileStyle">
             <br></br>
                 <Upload submitHandler = {submitHandler} handleTextChange = {handleTextChange} handleFileChange = {handleFileChange} button={uploadButton}/>
-                {postCards}
+                {newsFeedPosts.map((newsFeedPost) => {
+                    console.log("tada")
+                    return (
+                        <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
+                    )
+                })}
             </div>
         </div>
     );
