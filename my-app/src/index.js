@@ -21,7 +21,7 @@ ReactDOM.render(
         <LoginPage />
       </Route>
       <Route exact path = "/NewsFeed">
-        
+        <NewsFeed />
       </Route>
       <Route exact path = "/Chat">
         <Chat />

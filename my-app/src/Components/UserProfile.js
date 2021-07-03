@@ -9,7 +9,7 @@ export default function NewsFeed() {
     const db = fire.firestore()
 
     const [user, setUser] = useState(null)
-    const [fileURLs, setFileURLs] = useState([])
+    const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
 
     useEffect(() => {
@@ -18,9 +18,9 @@ export default function NewsFeed() {
                 setUser(authUser)
                 console.log(authUser)
                 db.collection("usersData").doc(authUser.email).collection("posts").onSnapshot(snapshot => {
-                    setFileURLs(snapshot.docs.map(doc => doc.data()))
+                    setPosts(snapshot.docs.map(doc => doc.data()))
                 })
-                console.log(fileURLs)
+                console.log(posts)
             } else {
               console.log("user signedout")
             }
@@ -29,15 +29,15 @@ export default function NewsFeed() {
         return () => {
             clearAuth()
         }
-    }, [user, db])
+    }, [user ,db])
 
     useEffect(() => {
-        setPostCards(fileURLs.map((fileURL) => {
+        setPostCards(posts.map((post) => {
             return (
-                <PostCard fileURL={fileURL.fileURL} username="Prasanth Gajula" postDescription={fileURL.postDescription} likes="500"/>
+                <PostCard fileURL={post.fileURL} username="Prasanth Gajula" postDescription={post.postDescription} likes="500"/>
             )
         }))
-    }, [fileURLs, db])
+    }, [posts ,db])
 
     return (
         <div>
