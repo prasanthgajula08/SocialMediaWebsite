@@ -8,6 +8,7 @@ import Chat from './Components/Chat';
 import UserProfile from './Components/UserProfile';
 import UserChat from './Components/UserChat';
 import SignUp from './Components/SignUp';
+import SearchProfile from './Components/SearchProfile'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 ReactDOM.render(
@@ -31,6 +32,7 @@ ReactDOM.render(
       <Route exact path = "/UserChat">
         <UserChat />
       </Route>
+      <Route exact path="/search/:personId" component={SearchProfile} />
     </Switch>
   </Router>,
   document.getElementById('root')
