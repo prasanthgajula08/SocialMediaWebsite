@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import fire from '../config/fire';
 
 export default function NavBar() {
+
+    const [searchValue, setSearchValue] = useState("")
 
    const signOutHandler = async () =>{
         await fire.auth().signOut();
         console.log("Signed out")
         window.location.replace("/");
+    }
+
+    const searchChangeHandler = (event) => {
+        setSearchValue(event.target.value)
+    }
+
+    const searchClickHandler = () => {
+        window.location.replace("/search/"+searchValue);
     }
 
     return (
@@ -38,10 +48,10 @@ export default function NavBar() {
                             </ul>
                             </li>
                         </ul>
-                        <form action="/UserProfile" class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button class="btn btn-outline-primary" type="submit">Search</button>
-                        </form>
+                        <div class="d-flex">
+                            <input onChange={searchChangeHandler} class="form-control me-2" placeholder="Search" aria-label="Search" />
+                            <button onClick={searchClickHandler} class="btn btn-outline-primary">Search</button>
+                        </div>
                     </div>
                 </div>
             </nav>
