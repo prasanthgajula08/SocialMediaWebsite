@@ -18,6 +18,7 @@ export default function NewsFeed() {
     const [newsFeedPosts, setNewsFeedPosts] = useState([])
     let [runs, setRuns] = useState(0)
     const [postCards, setPostCards] = useState([])
+    let postCard = []
 
     useEffect(() => {
         const clearAuth = fire.auth().onAuthStateChanged(function(authUser) {
@@ -39,37 +40,33 @@ export default function NewsFeed() {
     }, [user ,db])
 
     useEffect(() => {
-        db.collection('usersData').onSnapshot(snapshot => {
-            setUsers(snapshot.docs.map(doc => doc.data().username))
-        })
+        func()
     }, [])
 
-    useEffect(() => {
+    async function func() {
         var usersData = []
-        users.map((usr)=>{
-            db.collection('usersData').doc(usr).collection('posts').onSnapshot(snpsht => {
-                snpsht.docs.map(dc => usersData.push(dc.data()))
-            })
-        })
-        console.log(usersData)
-        setNewsFeedPosts(usersData)
-        console.log(newsFeedPosts)
-    }, [users, db])
+        await db.collection("usersData").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data().username)
+                // doc.data() is never undefined for query doc snapshots
+                db.collection('usersData').doc(doc.data().username).collection('posts').onSnapshot(snpsht => {
+                    // snpsht.docs.map((dc, index) => {
+                    //     console.log(dc.data())
+                    //     usersData.push(<PostCard key={index} fileURL={dc.data().fileURL} username="Prasanth Gajula" postDescription={dc.data().postDescription} likes="500"/>)
+                    // })
+                    for(var dc of snpsht.docs) {
+                        console.log(dc.data())
+                        usersData.push(<PostCard fileURL={dc.data().fileURL} username="Prasanth Gajula" postDescription={dc.data().postDescription} likes="500"/>)
+                        setPostCards(usersData)
+                    }
+                    console.log(usersData.length)
+                })
+            });
+        });
+    }
 
-    useEffect(() => {
-        console.log(newsFeedPosts)
-        //if(runs<1000){
-            setPostCards(newsFeedPosts.map((newsFeedPost) => {
-                console.log("tada")
-                return (
-                    <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
-                )
-            }))
-          //  setRuns(runs+1)
-        //}
-        console.log("what up")
-    }, [/*postCards ,*/newsFeedPosts ,db])
 
+    console.log(postCards)
     var handleFileChange = async (e) => {
         const file = e.target.files[0]
         const storageRef = fire.storage().ref()
