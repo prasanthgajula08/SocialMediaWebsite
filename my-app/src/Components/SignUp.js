@@ -37,15 +37,11 @@ function SignUp(props) {
                     <input type="text" className="form-control" placeholder="Last name" />
                 </div>
 
-                {/* <div name="usernameDiv" className="form-group"> */}
                     <label>Email address</label>
                     <input name="usernameInput" type="email" className="form-control" placeholder="Enter email" />
-                {/* </div> */}
-
-                {/* <div name="passwordDiv" className="form-group"> */}
+                
                     <label>Password</label>
                     <input name="passwordInput" type="password" className="form-control" placeholder="Enter password"/>
-                {/* </div> */}
 
                 <button type="submit" className="btn btn-primary btn-block" >Sign Up</button>
                 <p className="forgot-password text-right">

@@ -6,10 +6,6 @@ export default function LoginPage() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
-    // responseGoogle=(response)=>{
-    //     console.log(response);
-        
-    // }
 
     const handleUserNameChange = (event) => {
         setUserName(event.target.value)
