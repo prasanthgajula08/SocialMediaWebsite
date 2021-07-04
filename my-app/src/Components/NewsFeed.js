@@ -102,12 +102,7 @@ export default function NewsFeed() {
             <div className="userProfileStyle">
             <br></br>
                 <Upload submitHandler = {submitHandler} handleTextChange = {handleTextChange} handleFileChange = {handleFileChange} button={uploadButton}/>
-                {console.log(newsFeedPosts)}
-                {newsFeedPosts && newsFeedPosts.map((newsFeedPost,index) => {
-                    return (
-                        <p>Prasanth</p>
-                    )
-                })}
+                {postCards}
             </div>
         </div>
     );
