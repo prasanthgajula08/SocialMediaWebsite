@@ -17,12 +17,8 @@ export default function NewsFeed() {
     const [users, setUsers] = useState([])
     const [newsFeedPosts, setNewsFeedPosts] = useState(null)
     let [runs, setRuns] = useState(0)
-<<<<<<< HEAD
     const [postCards, setPostCards] = useState([])
     let postCard = []
-=======
-  //  const [postCards, setPostCards] = useState([])
->>>>>>> 0995c88deb21d6b319909681a0c83ba1c3a9cc39
 
     useEffect(() => {
         const clearAuth = fire.auth().onAuthStateChanged(function(authUser) {
@@ -69,35 +65,6 @@ export default function NewsFeed() {
         });
     }
 
-<<<<<<< HEAD
-=======
-    // useEffect(() => {
-    //     console.log(newsFeedPosts)
-    //     //if(runs<1000){
-    //         setPostCards(newsFeedPosts.map((newsFeedPost) => {
-    //             console.log("tada")
-    //             return (
-    //                 <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
-    //             )
-    //         }))
-    //       //  setRuns(runs+1)
-    //     //}
-    //     console.log("what up")
-    // }, [/*postCards ,*/newsFeedPosts ,db])
-
-    // useEffect(() => {
-
-    //  console.log(newsFeedPosts)
-    // },[newsFeedPosts])
-
-    // let postCardsData = newsFeedPosts?.map((newsFeedPost,index) => {
-    //     return (
-    //         <PostCard key={index} fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
-    //     )
-    // })
-    // console.log(postCardsData)
-
->>>>>>> 0995c88deb21d6b319909681a0c83ba1c3a9cc39
 
     console.log(postCards)
     var handleFileChange = async (e) => {
