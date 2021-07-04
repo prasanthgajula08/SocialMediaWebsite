@@ -8,8 +8,8 @@ import Chat from './Components/Chat';
 import UserProfile from './Components/UserProfile';
 import UserChat from './Components/UserChat';
 import SignUp from './Components/SignUp';
-import SearchProfile from './Components/SearchProfile'
-// import DummyPrasanth from './Components/dummyPrasanth';
+import SearchProfile from './Components/SearchProfile';
+import Dummy from './Components/dummy';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 ReactDOM.render(

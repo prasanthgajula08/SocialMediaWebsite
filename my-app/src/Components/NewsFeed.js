@@ -9,15 +9,15 @@ import PostCard from './PostCard';
 export default function NewsFeed() {
 
     const db = fire.firestore()
-    const [uploadButton, setUploadButton] = useState((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
+    const [uploadButton, setUploadButton] = useState((<button className="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04" disabled>Upload</button>))
     const [postDescription, setPostDescription] = useState("")
     const [postURL, setPostURL] = useState("")
     const [posts, setPosts] = useState([])
     const [user, setUser] = useState(null)
     const [users, setUsers] = useState([])
-    const [newsFeedPosts, setNewsFeedPosts] = useState([])
+    const [newsFeedPosts, setNewsFeedPosts] = useState(null)
     let [runs, setRuns] = useState(0)
-    const [postCards, setPostCards] = useState([])
+  //  const [postCards, setPostCards] = useState([])
 
     useEffect(() => {
         const clearAuth = fire.auth().onAuthStateChanged(function(authUser) {
@@ -56,19 +56,32 @@ export default function NewsFeed() {
         console.log(newsFeedPosts)
     }, [users, db])
 
-    useEffect(() => {
-        console.log(newsFeedPosts)
-        //if(runs<1000){
-            setPostCards(newsFeedPosts.map((newsFeedPost) => {
-                console.log("tada")
-                return (
-                    <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
-                )
-            }))
-          //  setRuns(runs+1)
-        //}
-        console.log("what up")
-    }, [/*postCards ,*/newsFeedPosts ,db])
+    // useEffect(() => {
+    //     console.log(newsFeedPosts)
+    //     //if(runs<1000){
+    //         setPostCards(newsFeedPosts.map((newsFeedPost) => {
+    //             console.log("tada")
+    //             return (
+    //                 <PostCard fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
+    //             )
+    //         }))
+    //       //  setRuns(runs+1)
+    //     //}
+    //     console.log("what up")
+    // }, [/*postCards ,*/newsFeedPosts ,db])
+
+    // useEffect(() => {
+
+    //  console.log(newsFeedPosts)
+    // },[newsFeedPosts])
+
+    // let postCardsData = newsFeedPosts?.map((newsFeedPost,index) => {
+    //     return (
+    //         <PostCard key={index} fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
+    //     )
+    // })
+    // console.log(postCardsData)
+
 
     var handleFileChange = async (e) => {
         const file = e.target.files[0]
@@ -76,7 +89,7 @@ export default function NewsFeed() {
         const fileRef = storageRef.child(file.name)
         await fileRef.put(file)
         setPostURL(await fileRef.getDownloadURL())
-        setUploadButton((<button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Upload</button>))
+        setUploadButton((<button className="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Upload</button>))
     };
 
     var submitHandler = async (e) => {
@@ -98,13 +111,19 @@ export default function NewsFeed() {
         setPostDescription(e.target.value)
     }
 
+    // <PostCard key={index} fileURL={newsFeedPost.fileURL} username="Prasanth Gajula" postDescription={newsFeedPost.postDescription} likes="500"/>
     return (
         <div>
             <NavBar />
             <div className="userProfileStyle">
             <br></br>
                 <Upload submitHandler = {submitHandler} handleTextChange = {handleTextChange} handleFileChange = {handleFileChange} button={uploadButton}/>
-                {postCards}
+                {console.log(newsFeedPosts)}
+                {newsFeedPosts && newsFeedPosts.map((newsFeedPost,index) => {
+                    return (
+                        <p>Prasanth</p>
+                    )
+                })}
             </div>
         </div>
     );
