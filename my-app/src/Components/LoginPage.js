@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import fire from '../config/fire';
+import './LoginPage.css'
 
 export default function LoginPage() {
 
@@ -33,37 +34,18 @@ export default function LoginPage() {
 
     return (
         <div>
-        <form /*action="/NewsFeed"*/>
-            <h3>Login</h3>
-
-            <div className="form-group">
-                <label>User Name</label>
-                <input type="text" className="form-control" placeholder="Enter User Name" onChange={handleUserNameChange}/>
-            </div>
-
-            <div className="form-group">
-                <label>Password</label>
-                <input type="password" className="form-control" placeholder="Enter password" onChange={handlePasswordChange}/>
-            </div>
-
-           <button onClick={validateUserInput} className="btn btn-primary btn-block">Submit</button>
-
-           <p> New to InstaBook ? <a href="/">SIGNUP</a> </p>
-
-            <p className="forgot-password text-right">
-                Forgot <a href="#">password?</a>
-            </p>
-           
-           {/* <div>
-              <GoogleLogin
-               clientId="791659548746-3fejvutdso1a7cvn681ampphavpseqfg.apps.googleusercontent.com"
-               buttonText="SignIn with Google"
-               onSuccess={this.responseGoogle}
-               onFailure={this.responseGoogle}
-               cookiePolicy={'single_host_origin'}
-               />
-            </div> */}
+        
+        <form onsubmit="event.preventDefault()" class="box">
+            <h1>Login</h1>
+            <p class="text-muted"> Please enter your email and password!</p>
+             <input type="text" name="" placeholder="Email" onChange={handleUserNameChange}/>
+              <input type="password" name="" placeholder="Password" onChange={handlePasswordChange}/> 
+              <a class="forgot text-muted" href="#">Forgot password?</a>
+              <p class="text-muted"> Don't have an account? <a class="forgot text-muted" href="/">Sign Up</a></p>
+               <input onClick={validateUserInput} type="submit" name="" value="Login"/>
+            
         </form>
+
         </div>
     );
 }
