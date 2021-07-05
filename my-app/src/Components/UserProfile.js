@@ -11,7 +11,7 @@ export default function NewsFeed() {
     const [user, setUser] = useState(null)
     const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
-    const [userProfile, setUserProfile] = useState(<UserInfo profilePicture="https://picsum.photos/150/150" username="" postsNumber="69" followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
+    const [userProfile, setUserProfile] = useState(<UserInfo profilePicture="" username="" postsNumber="0" followersNumber="0" followingNumber="0" fullName="" bio=""/>)
 
     useEffect(() => {
         const clearAuth =fire.auth().onAuthStateChanged(function(authUser) {
@@ -22,7 +22,7 @@ export default function NewsFeed() {
 
                 docRef.get().then((doc) => {
                     if (doc.exists) {
-                        setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={doc.data().username} postsNumber={doc.data().posts} followersNumber="70" followingNumber="71" fullName={doc.data().firstName + " " + doc.data().lastName} bio="Hakuna Matata"/>)
+                        setUserProfile(<UserInfo profilePicture={doc.data().profilePicture} username={doc.data().username} postsNumber={doc.data().posts} followersNumber={doc.data().followers} followingNumber={doc.data().following} fullName={doc.data().firstName + " " + doc.data().lastName} bio={doc.data().bio}/>)
                     } else {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
