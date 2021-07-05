@@ -9,6 +9,7 @@ function SignUp(props) {
         await fire.auth().createUserWithEmailAndPassword(event.target.usernameInput.value, event.target.passwordInput.value)
         await db.collection('usersData').doc(event.target.usernameInput.value).set({
             username: event.target.usernameInput.value,
+            email: event.target.emailInput.value,
             posts: 0
         })
        
@@ -27,18 +28,11 @@ function SignUp(props) {
             <form onSubmit={signUpHandler}>
                 <h3>signup</h3>
 
-                <div className="form-group">
-                    <label>First name</label>
-                    <input type="text" className="form-control" placeholder="First name" />
-                </div>
-
-                <div className="form-group">
-                    <label>Last name</label>
-                    <input type="text" className="form-control" placeholder="Last name" />
-                </div>
+                    <label>UserName</label>
+                    <input name="userNameInput" type="text" className="form-control" placeholder="Enter Username" />
 
                     <label>Email address</label>
-                    <input name="usernameInput" type="email" className="form-control" placeholder="Enter email" />
+                    <input name="emailInput" type="email" className="form-control" placeholder="Enter email" />
                 
                     <label>Password</label>
                     <input name="passwordInput" type="password" className="form-control" placeholder="Enter password"/>
