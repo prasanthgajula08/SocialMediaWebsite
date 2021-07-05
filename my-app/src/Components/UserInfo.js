@@ -6,9 +6,8 @@ function UserInfo(props) {
     const [isModal, setIsModal] = useState(false)
     const [isFileModal, setIsFileModal] = useState(false)
     const [newBio, setNewBio] = useState("")
-    const [newPic, setNewPic] = useState("")
+    let newPic = ""
     const [isSaved, setIsSaved] = useState(false)
-    // const [isPicSaved, setIsPicSaved] = useState(true)
     const [fileSaveButton, setFileSaveButton] = useState(<button type="button" className="btn btn-primary" disabled>Save</button>)
 
     const editBioHandler = () => {
@@ -46,8 +45,7 @@ function UserInfo(props) {
         const storageRef = fire.storage().ref()
         const fileRef = storageRef.child(file.name)
         await fileRef.put(file)
-        var downloadURL = await fileRef.getDownloadURL()
-        setNewPic(downloadURL)
+        newPic = await fileRef.getDownloadURL()
         setFileSaveButton(<button type="button" onClick={savePicHandler} className="btn btn-primary">Save</button>)
     }
 
