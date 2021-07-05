@@ -11,12 +11,14 @@ export default function NewsFeed() {
     const [user, setUser] = useState(null)
     const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
+    const [userProfile, setUserProfile] = useState(<UserInfo profilePicture="https://picsum.photos/150/150" username="" postsNumber="69" followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
 
     useEffect(() => {
         const clearAuth =fire.auth().onAuthStateChanged(function(authUser) {
             if (authUser) {
                 setUser(authUser)
                 console.log(authUser)
+                setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={authUser.email} postsNumber="69" followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
                 db.collection("usersData").doc(authUser.email).collection("posts").onSnapshot(snapshot => {
                     setPosts(snapshot.docs.map(doc => doc.data()))
                 })
@@ -34,7 +36,7 @@ export default function NewsFeed() {
     useEffect(() => {
         setPostCards(posts.map((post) => {
             return (
-                <PostCard fileURL={post.fileURL} username="Prasanth Gajula" postDescription={post.postDescription} likes="500"/>
+                <PostCard fileURL={post.fileURL} username={user.email} postDescription={post.postDescription} likes={post.likes}/>
             )
         }))
     }, [posts ,db])
@@ -44,7 +46,7 @@ export default function NewsFeed() {
             <NavBar />
             <div className="userProfileStyle">
             <br></br>
-                <UserInfo profilePicture="https://picsum.photos/150/150" username="Prasanth Gajula" postsNumber="69" followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>
+                {userProfile}
                 <br></br>
                 {postCards}
             </div>
