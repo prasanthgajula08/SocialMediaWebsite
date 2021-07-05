@@ -46,6 +46,16 @@ export default function LoginPage() {
             
         </form>
 
+         {/* <div>
+              <GoogleLogin
+               clientId="791659548746-3fejvutdso1a7cvn681ampphavpseqfg.apps.googleusercontent.com"
+               buttonText="SignIn with Google"
+               onSuccess={this.responseGoogle}
+               onFailure={this.responseGoogle}
+               cookiePolicy={'single_host_origin'}
+               />
+            </div> */}
+
         </div>
     );
 }

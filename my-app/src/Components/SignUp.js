@@ -1,5 +1,6 @@
 import React from 'react'
 import fire from '../config/fire'
+import './SignUp.css'
 
 function SignUp(props) {
     const db = fire.firestore()
@@ -31,28 +32,24 @@ function SignUp(props) {
 
     return (
         <div>
-            <form onSubmit={signUpHandler}>
-                <h3>signup</h3>
+            <form onSubmit={signUpHandler} class="box">
+                <h1>Register Now</h1>
 
-                    <label>FirstName</label>
+                <p class="text-muted"> Please enter your details to signup!</p>
+
+                    
                     <input name="firstNameInput" type="text" className="form-control" placeholder="Enter FirstName" />
 
-                    <label>LastName</label>
                     <input name="lastNameInput" type="text" className="form-control" placeholder="Enter LastName" />
 
-                    <label>UserName</label>
                     <input name="userNameInput" type="text" className="form-control" placeholder="Enter UserName" />
 
-                    <label>Email address</label>
-                    <input name="emailInput" type="email" className="form-control" placeholder="Enter email" />
-                
-                    <label>Password</label>
+                    <input name="emailInput" type="text" className="form-control" placeholder="Enter email" />
+
                     <input name="passwordInput" type="password" className="form-control" placeholder="Enter password"/>
 
-                <button type="submit" className="btn btn-primary btn-block" >Sign Up</button>
-                <p className="forgot-password text-right">
-                    Already registered <a href="/LoginPage">sign in?</a>
-                </p>
+                <input type="submit" name="" value="Sign Up"/>
+                <p class="text-muted"> Already Registered? <a class="forgot text-muted" href="/LoginPage">Sign In</a></p>
             </form>
         </div>
     )
