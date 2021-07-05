@@ -22,7 +22,7 @@ export default function NewsFeed() {
 
                 docRef.get().then((doc) => {
                     if (doc.exists) {
-                        setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={doc.data().username} postsNumber={doc.data().posts} followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
+                        setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={doc.data().username} postsNumber={doc.data().posts} followersNumber="70" followingNumber="71" fullName={doc.data().firstName + " " + doc.data().lastName} bio="Hakuna Matata"/>)
                     } else {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
