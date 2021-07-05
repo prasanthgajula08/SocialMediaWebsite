@@ -43,7 +43,7 @@ export default function NewsFeed() {
     async function func() {
         await db.collection("usersData").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                db.collection('usersData').doc(doc.data().username).collection('posts').get().then((qrysht) => {
+                db.collection('usersData').doc(doc.data().email).collection('posts').get().then((qrysht) => {
                     qrysht.forEach((dc) => {
                         postCount += 1
                     })
@@ -53,7 +53,7 @@ export default function NewsFeed() {
 
         await db.collection("usersData").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                db.collection('usersData').doc(doc.data().username).collection('posts').get().then((qrysht) => {
+                db.collection('usersData').doc(doc.data().email).collection('posts').get().then((qrysht) => {
                     qrysht.forEach((dc, index) => {
                         postCount2 += 1
                         postCard.push(<PostCard key={postCount2} fileURL={dc.data().fileURL} username={doc.data().username} postDescription={dc.data().postDescription} likes={dc.data().likes}/>)

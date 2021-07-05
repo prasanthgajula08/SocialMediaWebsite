@@ -18,9 +18,21 @@ export default function NewsFeed() {
             if (authUser) {
                 setUser(authUser)
                 console.log(authUser)
-                setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={authUser.email} postsNumber="69" followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
+                var docRef = db.collection('usersData').doc(authUser.email)
+
+                docRef.get().then((doc) => {
+                    if (doc.exists) {
+                        setUserProfile(<UserInfo profilePicture="https://picsum.photos/150/150" username={doc.data().username} postsNumber={doc.data().posts} followersNumber="70" followingNumber="71" fullName="Prasanth Chakravarthy Gajula" bio="Hakuna Matata"/>)
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                    }
+                }).catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+
                 db.collection("usersData").doc(authUser.email).collection("posts").onSnapshot(snapshot => {
-                    setPosts(snapshot.docs.map(doc => doc.data()))
+                    setPosts(snapshot.docs.map(dc => dc.data()))
                 })
                 console.log(posts)
             } else {

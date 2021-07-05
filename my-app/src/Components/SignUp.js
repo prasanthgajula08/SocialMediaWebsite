@@ -6,9 +6,9 @@ function SignUp(props) {
 
     const signUpHandler = async (event) => {
         event.preventDefault()
-        await fire.auth().createUserWithEmailAndPassword(event.target.usernameInput.value, event.target.passwordInput.value)
-        await db.collection('usersData').doc(event.target.usernameInput.value).set({
-            username: event.target.usernameInput.value,
+        await fire.auth().createUserWithEmailAndPassword(event.target.emailInput.value, event.target.passwordInput.value)
+        await db.collection('usersData').doc(event.target.emailInput.value).set({
+            username: event.target.userNameInput.value,
             email: event.target.emailInput.value,
             posts: 0
         })
