@@ -49,7 +49,7 @@ function SignUp(props) {
                     <input name="passwordInput" type="password" className="form-control" placeholder="Enter password"/>
 
                 <input type="submit" name="" value="Sign Up"/>
-                <p class="text-muted"> Already Registered? <a class="forgot text-muted" href="/LoginPage">Sign In</a></p>
+                <p class="text-muted"> Already Registered? <a className="forgot text-muted" href="/LoginPage">Sign In</a></p>
             </form>
         </div>
     )

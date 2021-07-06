@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(to middle, #faf8f8, #252525)
+    background: linear-gradient(to right, #faf8f8, #252525)
 }
 
 .card {
@@ -21,7 +21,7 @@ body {
     text-align: center;
     transition: 0.25s;
     margin-top: 100px;
-    transform : translate(-10%, -90%);
+    transform : translate(-30%, -60%);
 }
 
 .box input[type="text"],
@@ -72,10 +72,11 @@ body {
 }
 
 .forgot {
-    text-decoration: underline
+    text-decoration: underline;
+    text-decoration-color: blue;
 }
 
-ul.social-network {
+/* ul.social-network {
     list-style: none;
     display: inline;
     margin-left: 0 !important;
@@ -137,4 +138,4 @@ a.socialIcon:hover,
     color: #fff;
     transition: all 0.8s;
     transition: all 0.8s
-}
+} */

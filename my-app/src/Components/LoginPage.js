@@ -38,11 +38,17 @@ export default function LoginPage() {
         <form onsubmit="event.preventDefault()" class="box">
             <h1>Login</h1>
             <p class="text-muted"> Please enter your email and password!</p>
+            <br></br>
+            
              <input type="text" name="" placeholder="Email" onChange={handleUserNameChange}/>
               <input type="password" name="" placeholder="Password" onChange={handlePasswordChange}/> 
+
+              <input onClick={validateUserInput} type="submit" name="" value="Login"/>
+              <br></br>
               <a class="forgot text-muted" href="#">Forgot password?</a>
+              <br></br><br></br>
               <p class="text-muted"> Don't have an account? <a class="forgot text-muted" href="/">Sign Up</a></p>
-               <input onClick={validateUserInput} type="submit" name="" value="Login"/>
+              
             
         </form>
 
