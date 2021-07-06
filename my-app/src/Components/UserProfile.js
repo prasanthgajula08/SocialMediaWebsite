@@ -5,7 +5,7 @@ import PostCard from './PostCard';
 import UserInfo from './UserInfo';
 import '../Styles/UserProfile.css'
 
-export default function NewsFeed() {
+export default function UserProfile() {
     const db = fire.firestore()
 
     const [user, setUser] = useState(null)

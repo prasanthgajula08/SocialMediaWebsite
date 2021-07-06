@@ -62,8 +62,8 @@ function UserInfo(props) {
         <div>
             <div style={{justifyContent: "center", width: "40rem"}} className="row">
                 <div className="col-4">
-                    <img style = {{width: "150px", height: "150px", borderRadius: "50%"}} src={props.profilePicture} />
-                    <button style={{width: "100px"}} type="button" onClick={editPicHandler} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Pic</button>
+                    <center><img style = {{width: "150px", height: "150px", borderRadius: "50%"}} src={props.profilePicture} />
+                    <button style={{width: "100px"}} type="button" onClick={editPicHandler} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Pic</button></center>
                 </div>
                 <div className="col-6">
                     <div className= "row">
