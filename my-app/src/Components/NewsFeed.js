@@ -56,11 +56,8 @@ export default function NewsFeed() {
                 db.collection('usersData').doc(doc.data().email).collection('posts').get().then((qrysht) => {
                     qrysht.forEach((dc, index) => {
                         postCount2 += 1
-                        if(dc.data().email!=fire.auth().currentUser.email)
+                        if(doc.data().email!=fire.auth().currentUser.email)
                         {
-                            console.log(dc.data().username)
-                            console.log(fire.auth().currentUser.email)
-                            
                         postCard.push(<PostCard key={postCount2} fileURL={dc.data().fileURL} username={doc.data().username} postDescription={dc.data().postDescription} likes={dc.data().likes}/>)
                         }
                         if(postCount==postCount2) {
