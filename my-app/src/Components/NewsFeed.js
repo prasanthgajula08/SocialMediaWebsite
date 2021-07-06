@@ -4,7 +4,7 @@ import fire from '../config/fire'
 import firebase from 'firebase';
 import Upload from './Upload';
 import '../Styles/UserProfile.css'
-import PostCard from './PostCard';
+import PostCard from './PostCard'; 
 
 export default function NewsFeed() {
 
@@ -49,7 +49,7 @@ export default function NewsFeed() {
                     })
                 })
             });
-        });
+        }); 
 
         await db.collection("usersData").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -94,6 +94,7 @@ export default function NewsFeed() {
 
     var handleTextChange = (e) => {
         setPostDescription(e.target.value)
+        console.log("")
     }
 
     return (
