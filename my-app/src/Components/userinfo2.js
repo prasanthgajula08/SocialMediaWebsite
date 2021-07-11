@@ -9,18 +9,10 @@ function UserInfo2(props) {
     const [buttonColor, setButtonColor] = useState("blue");
 
     useEffect(() => {
-        console.log(props.following)
-        if(props.following)
-        {
-            setButtonText("Following")
-        }
-        else
-        {
-            setButtonText("Follow")
-        }
+     //  initiate()
     },[])
 
-    async function update_Firebase()
+    async function follow()
     {
         var docRef = await db.collection('usersData').doc(props.username)
      
@@ -34,14 +26,66 @@ function UserInfo2(props) {
         docRef2.update({
             following : firebase.firestore.FieldValue.arrayUnion(props.username)
         })
-        
+
+    }
+
+    async function unfollow()
+    {
+        var docRef = await db.collection('usersData').doc(props.username)
+     
+        docRef.update({
+            followers : firebase.firestore.FieldValue.arrayRemove(fire.auth().currentUser.displayName)
+        })
+
+
+        var docRef2 = await db.collection('usersData').doc(fire.auth().currentUser.displayName)
+    
+        docRef2.update({
+            following : firebase.firestore.FieldValue.arrayRemove(props.username)
+        })
+
     }
 
     const changeText = (text) => {
-        setButtonText(text);
+        initiate()
+        if(buttonText=="following"){
+            unfollow()
+            setButtonText("follow")
+        }
+        else
+         {
+             follow()
+             setButtonText("following")
+        }
         setButtonColor("white")
-        update_Firebase();
     }
+
+    async function initiate()
+    {
+        let arr=[]
+        var docRef = await db.collection('usersData').doc(props.username)
+        docRef.get().then((doc) => {
+            
+            if (doc.exists) {
+                console.log(doc.data().followers)
+                arr = doc.data().followers
+                console.log(arr)
+            }
+        })
+    for (const i of arr)
+    {
+        if(i==fire.auth().currentUser.displayName)
+        {
+         setButtonText("following")
+        }
+        else
+        {
+            setButtonText("follow")
+        }
+
+    }
+
+    } 
 
     return (
         <div>
