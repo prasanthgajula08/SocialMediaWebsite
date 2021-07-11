@@ -9,6 +9,10 @@ function PostCard(props) {
         console.log(isImgModal)
     }
 
+    const usernameClickHandler = () =>{
+        window.location.replace("/search/"+props.username);
+    }
+
     return (
         <div>
             <br></br>
@@ -16,7 +20,7 @@ function PostCard(props) {
                 {/* <a onClick={imgClickHandler}><img src={props.fileURL} className="card-img-top" /></a> */}
                 <input type="image" src={props.fileURL}></input>
                 <div className="card-body">
-                    <p className="card-title"><strong>{props.username}</strong></p>
+                    <p onClick={usernameClickHandler} className="card-title"><strong>{props.username}</strong></p>
                     <p className="card-text">{props.postDescription}</p>
                     <button  type="button" className="btn btn-primary">Likes({props.likes})</button>
                 </div>

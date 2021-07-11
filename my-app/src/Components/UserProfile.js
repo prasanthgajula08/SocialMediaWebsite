@@ -18,11 +18,11 @@ export default function UserProfile() {
             if (authUser) {
                 setUser(authUser)
                 console.log(authUser)
-                var docRef = db.collection('usersData').doc(authUser.email)
+                var docRef = db.collection('usersData').doc(authUser.displayName)
 
                 docRef.get().then((doc) => {
                     if (doc.exists) {
-                        setUserProfile(<UserInfo profilePicture={doc.data().profilePicture} username={doc.data().username} postsNumber={doc.data().posts} followersNumber={doc.data().followers} followingNumber={doc.data().following} fullName={doc.data().firstName + " " + doc.data().lastName} bio={doc.data().bio}/>)
+                        setUserProfile(<UserInfo profilePicture={doc.data().profilePicture} username={doc.data().username} postsNumber={doc.data().posts} followersNumber={doc.data().followers_count} followingNumber={doc.data().following_count} fullName={doc.data().firstName + " " + doc.data().lastName} bio={doc.data().bio}/>)
                     } else {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
@@ -31,7 +31,7 @@ export default function UserProfile() {
                     console.log("Error getting document:", error);
                 });
 
-                db.collection("usersData").doc(authUser.email).collection("posts").onSnapshot(snapshot => {
+                db.collection("usersData").doc(authUser.displayName).collection("posts").onSnapshot(snapshot => {
                     setPosts(snapshot.docs.map(dc => dc.data()))
                 })
                 console.log(posts)

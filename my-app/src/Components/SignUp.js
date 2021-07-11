@@ -4,18 +4,21 @@ import './SignUp.css'
 
 function SignUp(props) {
     const db = fire.firestore()
-
     const signUpHandler = async (event) => {
         event.preventDefault()
-        await fire.auth().createUserWithEmailAndPassword(event.target.emailInput.value, event.target.passwordInput.value)
-        await db.collection('usersData').doc(event.target.emailInput.value).set({
+        const Email =  await fire.auth().createUserWithEmailAndPassword(event.target.emailInput.value, event.target.passwordInput.value)
+        Email.user.updateProfile({displayName:event.target.userNameInput.value})
+        console.log(Email.user.displayName)
+        await db.collection('usersData').doc(event.target.userNameInput.value).set({
             username: event.target.userNameInput.value,
             email: event.target.emailInput.value,
             posts: 0,
             firstName: event.target.firstNameInput.value,
             lastName: event.target.lastNameInput.value,
-            followers: 0,
-            following: 0,
+            followers_count: 0,
+            following_count: 0,
+            followers:[],
+            following:[],
             bio: "",
             profilePicture: "https://picsum.photos/150/150"
         })
