@@ -9,7 +9,8 @@ function UserInfo2(props) {
     const [buttonColor, setButtonColor] = useState("blue");
 
     useEffect(() => {
-     //  initiate()
+        console.log(props.followstatus)
+      // initiate()
     },[])
 
     async function follow()
@@ -64,7 +65,7 @@ function UserInfo2(props) {
     {
         let arr=[]
         var docRef = await db.collection('usersData').doc(props.username)
-        docRef.get().then((doc) => {
+       await docRef.get().then((doc) => {
             
             if (doc.exists) {
                 console.log(doc.data().followers)

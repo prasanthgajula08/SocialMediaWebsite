@@ -12,14 +12,15 @@ function SearchProfile(props) {
     const [user, setUser] = useState(props.match.params.personId)
     const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
-    const [userProfile, setUserProfile] = useState(<UserInfo2 profilePicture="" username="" postsNumber="0" followersNumber="0" followingNumber="0" fullName="" bio="" currentuser=""/>)
-    const [isFollowing, setFollowing] = useState(false)
+    const [userProfile, setUserProfile] = useState(<UserInfo2 profilePicture="" username="" postsNumber="0" followersNumber="0" followingNumber="0" fullName="" bio="" currentuser="" followstatus=""/>)
+    const [string, setString] = useState("")
 
     useEffect(() => {
                 var docRef = db.collection('usersData').doc(user)
                 docRef.get().then((doc) => {
                     if (doc.exists) {
-                        setUserProfile(<UserInfo2 profilePicture={doc.data().profilePicture} username={doc.data().username} postsNumber={doc.data().posts} followersNumber={doc.data().followers_count} followingNumber={doc.data().following_count} fullName={doc.data().firstName + " " + doc.data().lastName} bio={doc.data().bio}/>)
+                        isfollowing()
+                        setUserProfile(<UserInfo2 profilePicture={doc.data().profilePicture} username={doc.data().username} postsNumber={doc.data().posts} followersNumber={doc.data().followers_count} followingNumber={doc.data().following_count} fullName={doc.data().firstName + " " + doc.data().lastName} bio={doc.data().bio} followstatus={string}/>)
                     } else {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
@@ -32,13 +33,7 @@ function SearchProfile(props) {
                     setPosts(snapshot.docs.map(dc => dc.data()))
                 })
                 console.log(posts)
-                docRef.get().then((doc) => {
-            
-                    if (doc.exists) {
-                        console.log(doc.data().followers)
-                    }
-
-        })
+               
 
     }, [user ,db])
 
@@ -55,6 +50,33 @@ function SearchProfile(props) {
             )
         }))
     }, [posts ,db])
+
+    async function isfollowing()
+    {
+        let arr=[]
+        var docRef = await db.collection('usersData').doc(props.username)
+       await docRef.get().then((doc) => {
+            
+            if (doc.exists) {
+                console.log(doc.data().followers)
+                arr = doc.data().followers
+                console.log(arr)
+            }
+        })
+    for (const i of arr)
+    {
+        if(i==fire.auth().currentUser.displayName)
+        {
+        setString("following")
+        }
+        else
+        {
+          setString("follow")
+        }
+
+    }
+
+    } 
 
     return (
         <div>
