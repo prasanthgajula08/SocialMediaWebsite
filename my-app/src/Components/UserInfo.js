@@ -22,7 +22,7 @@ function UserInfo(props) {
     }
 
     const saveBioHandler = async () => {
-        await db.collection('usersData').doc(fire.auth().currentUser.email).update({
+        await db.collection('usersData').doc(fire.auth().currentUser.displayName).update({
             bio: newBio
         })
         setIsSaved(true)
@@ -30,7 +30,7 @@ function UserInfo(props) {
 
     const savePicHandler = async () => {
         console.log(newPic)
-        await db.collection('usersData').doc(fire.auth().currentUser.email).update({
+        await db.collection('usersData').doc(fire.auth().currentUser.displayName).update({
             profilePicture: newPic
         })
         setFileSaveButton(<button type="button" className="btn btn-primary" disabled>Saved</button>)

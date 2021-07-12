@@ -9,6 +9,7 @@ import '../Styles/UserProfile.css'
 function SearchProfile(props) {
     const db = fire.firestore()
 
+    const [docId, setDocId] = useState(null)
     const [user, setUser] = useState(props.match.params.personId)
     const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
@@ -29,26 +30,26 @@ function SearchProfile(props) {
                 });
 
                 db.collection("usersData").doc(user).collection("posts").onSnapshot(snapshot => {
-                    setPosts(snapshot.docs.map(dc => dc.data()))
+                    setPosts(snapshot.docs.map(dc => {setDocId(dc.id);return dc.data()}))
                 })
                 console.log(posts)
                
 
     }, [user ,db])
 
-    useEffect(() => {
-        db.collection("usersData").doc(user).collection("posts").onSnapshot(snapshot => {
-            setPosts(snapshot.docs.map(doc => doc.data()))
-        })
-    }, [])
+    // useEffect(() => {
+    //     db.collection("usersData").doc(user).collection("posts").onSnapshot(snapshot => {
+    //         setPosts(snapshot.docs.map(doc => {setDocId(doc.id);return doc.data()}))
+    //     })
+    // }, [])
 
     useEffect(() => {
         setPostCards(posts.map((post) => {
             return (
-                <PostCard fileURL={post.fileURL} username={user} postDescription={post.postDescription} likes="500"/>
+                <PostCard curUser={fire.auth().currentUser.displayName} docName={docId} fileURL={post.fileURL} username={user} postDescription={post.postDescription} likes={post.likes}/>
             )
         }))
-    }, [posts ,db])
+    }, [posts, docId ,db])
 
 
     return (
