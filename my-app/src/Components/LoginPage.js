@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import fire from '../config/fire';
-import './LoginPage.css'
+import '../Styles/LoginPage.css'
 
 export default function LoginPage() {
 

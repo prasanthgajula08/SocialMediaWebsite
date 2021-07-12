@@ -1,6 +1,6 @@
 import React from 'react'
 import fire from '../config/fire'
-import './SignUp.css'
+import '../Styles/SignUp.css'
 
 function SignUp(props) {
     const db = fire.firestore()
