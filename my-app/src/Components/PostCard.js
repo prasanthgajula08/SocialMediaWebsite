@@ -1,54 +1,69 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import fire from '../config/fire'
+import firebase from 'firebase'
 
 function PostCard(props) {
-    let isImgModal = false
+    const db = fire.firestore()
 
-    const imgClickHandler = () => {
-        console.log("clicked")
-        isImgModal = true
-        console.log(isImgModal)
+    const [likeButtonClicked, setLikeButtonClicked] = useState(false)
+    const [likes, setLikes] = useState(0)
+
+    useEffect(() => {
+        func()
+    }, [])
+
+    function func() {
+        var docRef = db.collection('usersData').doc(props.username).collection('posts').doc(props.docName)
+        
+        docRef.get().then((dc) => {
+            setLikes(dc.data().likes)
+            var likedUsers = dc.data().likedBy
+
+            if(likedUsers.includes(props.curUser)){
+                setLikeButtonClicked(true)
+            }
+        })
     }
 
-    const usernameClickHandler = () =>{
-        window.location.replace("/search/"+props.username);
+    const likeClickHandler = async () => {
+        console.log("liked")
+        await db.collection('usersData').doc(props.username).collection('posts').doc(props.docName).update({
+            likes: firebase.firestore.FieldValue.increment(1),
+            likedBy: firebase.firestore.FieldValue.arrayUnion(props.curUser)
+        })
+        var docRef = db.collection('usersData').doc(props.username).collection('posts').doc(props.docName)
+        
+        docRef.get().then((dc) => {
+            setLikes(dc.data().likes)
+        })
+        setLikeButtonClicked(true)
+    }
+
+    const unlikeClickHandler = async () => {
+        console.log("unliked")
+        await db.collection('usersData').doc(props.username).collection('posts').doc(props.docName).update({
+            likes: firebase.firestore.FieldValue.increment(-1),
+            likedBy: firebase.firestore.FieldValue.arrayRemove(props.curUser)
+        })
+        var docRef = db.collection('usersData').doc(props.username).collection('posts').doc(props.docName)
+        
+        docRef.get().then((dc) => {
+            setLikes(dc.data().likes)
+        })
+        setLikeButtonClicked(false)
     }
 
     return (
         <div>
             <br></br>
             <div className="card" style={{width: '40rem'}}>
-                {/* <a onClick={imgClickHandler}><img src={props.fileURL} className="card-img-top" /></a> */}
                 <input type="image" src={props.fileURL}></input>
                 <div className="card-body">
-                    <p onClick={usernameClickHandler} className="card-title"><strong>{props.username}</strong></p>
+                    <p className="card-title"><strong>{props.username}</strong></p>
                     <p className="card-text">{props.postDescription}</p>
-                    <button  type="button" className="btn btn-primary">Likes({props.likes})</button>
+                    {likeButtonClicked ? (<button  type="button" onClick={unlikeClickHandler} className="btn btn-primary">Unlike({likes})</button>) : (<button  type="button" onClick={likeClickHandler} className="btn btn-primary">Likes({likes})</button>)}
                 </div>
             </div>
-            {
-                isImgModal ? (
-                    <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Post</h5>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div className="modal-body">
-                                    <form>
-                                        <div className="mb-3">
-                                        <img src={props.fileURL} className="card-img-top" />
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ) : console.log("ImgModal Inactive")
-                }
         </div>
     )
 }

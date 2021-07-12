@@ -59,7 +59,7 @@ export default function NewsFeed() {
                         postCount2 += 1
                         if(doc.data().username != fire.auth().currentUser.displayName)
                         {
-                        postCard.push(<PostCard key={postCount2} fileURL={dc.data().fileURL} username={doc.data().username} postDescription={dc.data().postDescription} likes={dc.data().likes}/>)
+                        postCard.push(<PostCard key={postCount2} curUser={fire.auth().currentUser.displayName} docName={dc.id} fileURL={dc.data().fileURL} username={doc.data().username} postDescription={dc.data().postDescription} likes={dc.data().likes}/>)
                         }
                         if(postCount==postCount2) {
                             setPostCards(postCard)
@@ -85,6 +85,7 @@ export default function NewsFeed() {
         await db.collection('usersData').doc(fire.auth().currentUser.displayName).collection('posts').doc(docNumber.toString()).set({
             fileURL : postURL,
             postDescription: postDescription,
+            likedBy : [],
             likes: 0,
         })
         await db.collection('usersData').doc(fire.auth().currentUser.displayName).update({

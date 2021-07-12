@@ -8,6 +8,7 @@ import '../Styles/UserProfile.css'
 export default function UserProfile() {
     const db = fire.firestore()
 
+    const [docId, setDocId] = useState(null)
     const [user, setUser] = useState(null)
     const [posts, setPosts] = useState([])
     const [postCards, setPostCards] = useState([])
@@ -32,7 +33,7 @@ export default function UserProfile() {
                 });
 
                 db.collection("usersData").doc(authUser.displayName).collection("posts").onSnapshot(snapshot => {
-                    setPosts(snapshot.docs.map(dc => dc.data()))
+                    setPosts(snapshot.docs.map(dc => {setDocId(dc.id);return dc.data()}))
                 })
                 console.log(posts)
             } else {
@@ -48,10 +49,10 @@ export default function UserProfile() {
     useEffect(() => {
         setPostCards(posts.map((post) => {
             return (
-                <PostCard fileURL={post.fileURL} username={user.email} postDescription={post.postDescription} likes={post.likes}/>
+                <PostCard curUser={fire.auth().currentUser.displayName} docName={docId} fileURL={post.fileURL} username={user.displayName} postDescription={post.postDescription} likes={post.likes}/>
             )
         }))
-    }, [posts ,db])
+    }, [posts ,docId ,db])
 
     return (
         <div>
