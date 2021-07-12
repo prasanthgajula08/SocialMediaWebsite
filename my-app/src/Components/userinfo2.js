@@ -10,7 +10,7 @@ function UserInfo2(props) {
 
     useEffect(() => {
         console.log(props.followstatus)
-      // initiate()
+       initiate()
     },[])
 
     async function follow()
