@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar'
 import fire from '../config/fire'
+import FriendCard from './FriendCard';
 
 export default function UserChat() {
     const db = fire.firestore()
 
     const [following, setFollowing] = useState([])
     let chatList = []
-    const [chutList, setChutList] = useState(null)
-    let proPics = []
+    const [chutList, setChutList] = useState([])
 
     useEffect(() => {
         fire.auth().onAuthStateChanged((authUser) => {
@@ -19,81 +19,20 @@ export default function UserChat() {
                 })
             }
             else{
-                chatList = following.map((friend, index) => {
+                following.map((friend, index) => {
                     var dcRef = db.collection('usersData').doc(friend)
 
                     dcRef.get().then((doc) => {
-                        proPics.push(doc.data().profilePicture)
+                        chatList.push(<FriendCard key={index} proPic={doc.data().profilePicture} friendName={friend}/>)
+                        if(following.length==chatList.length){
+                            console.log("Equal")
+                            setChutList(chatList)
+                        }
                     })
-                    console.log(proPics)
-                    return (
-                        <div key={index}>
-                            <a style={{textDecoration: "none"}} href="/UserChat">
-                                <hr></hr>
-                                <div style={{justifyContent: "space-around", width: "400px", height:"72px"}} class="row">
-                                    <div class="col-1">
-                                        <img style = {{width: "56px", height: "56px", borderRadius: "50%"}} src={proPics[proPics.length-1]} />
-                                    </div>
-                                    <div style = {{width: "224px", height: "60px"}} class="col-9">
-                                        <div style={{marginTop: "10px"}} class= "row">
-                                            <h2 style={{fontSize: "14px"}}>{friend}</h2>
-                                        </div>
-                                        <div class= "row">
-                                            <h2 style={{color: "#B3B3B3", fontSize: "14px"}}>Message Status</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    )
                 });
             }
-            setChutList(chatList)
         })
-        //func()
     }, [following])
-
-    function func(){
-        fire.auth().onAuthStateChanged((authUser) => {
-            if(following.length==0){
-                var docRef = db.collection('usersData').doc(authUser.displayName)
-    
-                docRef.get().then((dc) => {
-                    setFollowing(dc.data().following)
-                })
-            }
-    
-            else{
-                chatList = following.map((friend) => {
-                    var dcRef = db.collection('usersData').doc(friend)
-                    let dcProPic = ""
-                    dcRef.get().then((doc) => {
-                        dcProPic = doc.data().profilePicture
-                    })
-                    return (
-                    <div>
-                        <a style={{textDecoration: "none"}} href="/UserChat">
-                            <hr></hr>
-                            <div style={{justifyContent: "space-around", width: "400px", height:"72px"}} class="row">
-                                <div class="col-1">
-                                    <img style = {{width: "56px", height: "56px", borderRadius: "50%"}} src={dcProPic} />
-                                </div>
-                                <div style = {{width: "224px", height: "60px"}} class="col-9">
-                                    <div style={{marginTop: "10px"}} class= "row">
-                                        <h2 style={{fontSize: "14px"}}>{friend}</h2>
-                                    </div>
-                                    <div class= "row">
-                                        <h2 style={{color: "#B3B3B3", fontSize: "14px"}}>Message Status</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    )
-                });
-            }
-        })
-    }
 
     return (
         <div>
