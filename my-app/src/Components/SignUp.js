@@ -34,7 +34,7 @@ function SignUp(props) {
         }
 
     return (
-        <div>
+        <div className="bodyClass">
             <form onSubmit={signUpHandler} class="box">
                 <h1>Register Now</h1>
 

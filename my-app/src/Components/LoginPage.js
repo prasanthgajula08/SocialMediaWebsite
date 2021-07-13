@@ -33,7 +33,7 @@ export default function LoginPage() {
       }
 
     return (
-        <div>
+        <div className="bodyClass">
         
         <form onsubmit="event.preventDefault()" class="box">
             <h1>Login</h1>
