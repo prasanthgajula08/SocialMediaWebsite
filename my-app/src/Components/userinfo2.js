@@ -18,14 +18,16 @@ function UserInfo2(props) {
         var docRef = await db.collection('usersData').doc(props.username)
      
         docRef.update({
-            followers : firebase.firestore.FieldValue.arrayUnion(fire.auth().currentUser.displayName)
+            followers : firebase.firestore.FieldValue.arrayUnion(fire.auth().currentUser.displayName),
+            followers_count : firebase.firestore.FieldValue.increment(1)
         })
 
 
         var docRef2 = await db.collection('usersData').doc(fire.auth().currentUser.displayName)
     
         docRef2.update({
-            following : firebase.firestore.FieldValue.arrayUnion(props.username)
+            following : firebase.firestore.FieldValue.arrayUnion(props.username),
+            following_count : firebase.firestore.FieldValue.increment(1)
         })
 
     }
@@ -35,14 +37,16 @@ function UserInfo2(props) {
         var docRef = await db.collection('usersData').doc(props.username)
      
         docRef.update({
-            followers : firebase.firestore.FieldValue.arrayRemove(fire.auth().currentUser.displayName)
+            followers : firebase.firestore.FieldValue.arrayRemove(fire.auth().currentUser.displayName),
+            followers_count : firebase.firestore.FieldValue.decrement(1)
         })
 
 
         var docRef2 = await db.collection('usersData').doc(fire.auth().currentUser.displayName)
     
         docRef2.update({
-            following : firebase.firestore.FieldValue.arrayRemove(props.username)
+            following : firebase.firestore.FieldValue.arrayRemove(props.username),
+            following_count : firebase.firestore.FieldValue.decrement(1)
         })
 
     }
