@@ -38,7 +38,7 @@ function UserInfo2(props) {
      
         docRef.update({
             followers : firebase.firestore.FieldValue.arrayRemove(fire.auth().currentUser.displayName),
-            followers_count : firebase.firestore.FieldValue.decrement(1)
+            followers_count : firebase.firestore.FieldValue.increment(-1)
         })
 
 
@@ -46,7 +46,7 @@ function UserInfo2(props) {
     
         docRef2.update({
             following : firebase.firestore.FieldValue.arrayRemove(props.username),
-            following_count : firebase.firestore.FieldValue.decrement(1)
+            following_count : firebase.firestore.FieldValue.increment(-1)
         })
 
     }
