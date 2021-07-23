@@ -1,0 +1,12 @@
+.scroll
+    {
+        max-height: 700px;
+        overflow-y: scroll;
+        height:"700px";
+      
+    }
+
+   /* .body{
+        justifyContent:"center"; 
+        alignContent:"center;
+    }*/

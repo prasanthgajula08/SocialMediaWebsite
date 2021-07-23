@@ -47,7 +47,7 @@ export default function UserChat() {
                         <div style={{overflowY: "auto", height:"750px", border:"1px solid rgba(39,41,43,0.1)", alignContent:"flex-start"}} class="row">
                             <div>
                                 <br></br>
-                                <a style={{textDecoration: "none"}} href="/UserChat">
+                                <a style={{textDecoration: "none"}} href="/chatting">
                                     <div style={{justifyContent: "space-around", width: "400px", height:"72px"}} class="row">
                                         <div class="col-1">
                                             <img style = {{width: "56px", height: "56px", borderRadius: "50%"}} src="https://picsum.photos/55/56" />
