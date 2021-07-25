@@ -46,7 +46,7 @@ export default function Temp() {
 
   async  function updateMessages()
     {
-        await db.collection('usersData').doc(currUser).collection("messages").doc(frnd).collection("messages").get().then((qrysht) => {
+        await db.collection('usersData').doc(currUser).collection("messages").doc(frnd).collection("messages").orderBy("createdAt").get().then((qrysht) => {
             qrysht.forEach((dc) => {
                 arr.push(dc.data().user+": "+dc.data().message)
             })
