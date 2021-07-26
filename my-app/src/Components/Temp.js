@@ -61,23 +61,24 @@ function clickHandler(text)
     setUser(text)
     frnd = text
     updateMessages()
-    console.log(user)
 }
 
-async function sendMessage(msg)
+async function sendMessage()
 {
-    setmessage(document.getElementById("inputMessage").value)
+    let Message = document.getElementById("inputMessage").value
+    console.log(Message)
      await db.collection('usersData').doc(user).collection("messages").doc(fire.auth().currentUser.displayName).collection("messages").add({
-        message: txtMessage,
+        message: Message,
         user: fire.auth().currentUser.displayName,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
 })
 await db.collection('usersData').doc(fire.auth().currentUser.displayName).collection("messages").doc(user).collection("messages").add({
-    message: txtMessage,
+    message: Message,
     user: fire.auth().currentUser.displayName,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
 })
-//clearInputBox()
+//window.location.replace("/Temp");
+clearInputBox()
 
 }
 
