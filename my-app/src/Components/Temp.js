@@ -77,10 +77,13 @@ await db.collection('usersData').doc(fire.auth().currentUser.displayName).collec
     user: fire.auth().currentUser.displayName,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
 })
+//clearInputBox()
 
-//make message input box empty
-document.getElementById("inputMessage").value=""
+}
 
+function clearInputBox()
+{
+    document.getElementById("inputMessage").value=""
 }
 
     return (

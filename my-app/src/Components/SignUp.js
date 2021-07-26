@@ -4,6 +4,8 @@ import '../Styles/SignUp.css'
 
 function SignUp(props) {
     const db = fire.firestore()
+
+    
     const signUpHandler = async (event) => {
         event.preventDefault()
         const Email =  await fire.auth().createUserWithEmailAndPassword(event.target.emailInput.value, event.target.passwordInput.value)
