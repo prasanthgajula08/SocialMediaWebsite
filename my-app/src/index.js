@@ -33,9 +33,7 @@ ReactDOM.render(
       <Route exact path = "/UserProfile">
         <UserProfile />
       </Route>
-      <Route exact path = "/UserChat">
-        <UserChat />
-      </Route>
+      <Route exact path = "/chat/:friendId" component={UserChat} />
       <Route exact path="/search/:personId" component={SearchProfile} />
     </Switch>
   </Router>,

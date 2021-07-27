@@ -36,7 +36,7 @@ export default function NavBar() {
                             <a className="nav-link active" aria-current="page" href="/NewsFeed">Home</a>
                             </li>
                             <li className="nav-item">
-                            <a className="nav-link" href="/Temp">Chat</a>
+                            <a className="nav-link" href="/Chat">Chat</a>
                             </li>
                             <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

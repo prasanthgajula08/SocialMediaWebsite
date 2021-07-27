@@ -1,85 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar'
+import fire from '../config/fire'
+import FriendCard from './FriendCard';
+import firebase from 'firebase';
 
-export default function UserChat() {
-    const styles = {
-        width: 500,
-        height: 400
-    }
-    const articleStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+export default function UserChat(props) {
+    const [frnd, setFrnd] = useState(props.match.params.friendId)
+
+    const db = fire.firestore()
+    const [proPic, setProPic] = useState(null)
+    const [user, setUser] = useState(null)
+    const [following, setFollowing] = useState([])
+    const [chatMessages, setChatMessages] = useState([])
+    let arr=[]
+    let chatList = []
+    const [chutList, setChutList] = useState([])
+
+    useEffect(() => {
+        setProfilePicture()
+        
+        fire.auth().onAuthStateChanged((authUser) => {
+            setUser(authUser.displayName)
+            if(following.length==0){
+                var docRef = db.collection('usersData').doc(authUser.displayName)
+                docRef.get().then((dc) => {
+                    const followers =dc.data().followers
+                    const following =dc.data().following
+                    const temp = [...followers, ...following]
+                    setFollowing(temp)
+                })
+            }
+            else{
+                following.map((friend, index) => {
+                    var dcRef = db.collection('usersData').doc(friend)
+
+                    dcRef.get().then((doc) => {
+                        chatList.push(<FriendCard key={index} name={friend} proPic={doc.data().profilePicture} friendName={friend}/>)
+                        if(following.length==chatList.length){
+                            setChutList(chatList)
+                        }
+                    })
+                });
+            }
+            updateMessages()
+        })
+    }, [following])
+
+    async function setProfilePicture() {
+        var dRef = db.collection('usersData').doc(frnd)
+
+        await dRef.get().then((d) => {
+            setProPic(d.data().profilePicture)
+        })
     }
 
-    var images = ["https://picsum.photos/56/56","https://picsum.photos/56/57","https://picsum.photos/56/58","https://picsum.photos/56/59","https://picsum.photos/56/60","https://picsum.photos/56/61","https://picsum.photos/56/62","https://picsum.photos/56/63","https://picsum.photos/56/64","https://picsum.photos/56/65"]
-    var chatList = images.map((image) => {
-        return (
-        <div>
-            <a style={{textDecoration: "none"}} href="/UserChat">
-                <hr></hr>
-                <div style={{justifyContent: "space-around", width: "400px", height:"72px"}} class="row">
-                    <div class="col-1">
-                        <img style = {{width: "56px", height: "56px", borderRadius: "50%"}} src={image} />
-                    </div>
-                    <div style = {{width: "224px", height: "60px"}} class="col-9">
-                        <div style={{marginTop: "10px"}} class= "row">
-                            <h2 style={{fontSize: "14px"}}>UserName</h2>
-                        </div>
-                        <div class= "row">
-                            <h2 style={{color: "#B3B3B3", fontSize: "14px"}}>Message Status</h2>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        )
-    });
+    async function updateMessages()
+    {
+        await db.collection('usersData').doc(fire.auth().currentUser.displayName).collection("messages").doc(frnd).collection("messages").orderBy("createdAt").get().then((qrysht) => {
+            qrysht.forEach((dc) => {
+                arr.push(dc.data().user+": "+dc.data().message)
+            })
+            })
+            setChatMessages(arr)
+    }
+
+    async function sendMessage()
+    {
+        let Message = document.getElementById("inputMessage").value
+        console.log(Message)
+        await db.collection('usersData').doc(frnd).collection("messages").doc(fire.auth().currentUser.displayName).collection("messages").add({
+            message: Message,
+            user: fire.auth().currentUser.displayName,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        await db.collection('usersData').doc(fire.auth().currentUser.displayName).collection("messages").doc(frnd).collection("messages").add({
+            message: Message,
+            user: fire.auth().currentUser.displayName,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        document.getElementById("inputMessage").value=""
+        window.location.reload()
+    }
 
     return (
         <div>
             <NavBar />
-            <div class="container">
-                <div style={{justifyContent:"center"}} class="row">
-                    <div class="col-4">
-                        <div style={{height:"60px", border:"1px solid rgba(39,41,43,0.1)", justifyContent:"center", alignContent:"center"}} class="row">UserName</div>
-                        <div style={{overflowY: "auto", height:"750px", border:"1px solid rgba(39,41,43,0.1)", alignContent:"flex-start"}} class="row">
-                            <div>
-                                <br></br>
-                                <a style={{textDecoration: "none"}} href="/chatting">
-                                    <div style={{justifyContent: "space-around", width: "400px", height:"72px"}} class="row">
-                                        <div class="col-1">
-                                            <img style = {{width: "56px", height: "56px", borderRadius: "50%"}} src="https://picsum.photos/55/56" />
-                                        </div>
-                                        <div style = {{width: "224px", height: "60px"}} class="col-9">
-                                            <div style={{marginTop: "10px"}} class= "row">
-                                                <h2 style={{fontSize: "14px"}}>UserName</h2>
-                                            </div>
-                                            <div class= "row">
-                                                <h2 style={{color: "#B3B3B3", fontSize: "14px"}}>Message Status</h2>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            {chatList}
+            <div className="container">
+                <div style={{justifyContent:"center"}} className="row">
+                    <div className="col-4">
+                        <div style={{height:"40px", border:"1px solid rgba(39,41,43,0.1)", justifyContent:"center", alignContent:"center"}} className="row">{user}</div>
+                        <div style={{overflowY: "auto", height:"780px", border:"1px solid rgba(39,41,43,0.1)", alignContent:"flex-start"}} className="row">
+                            {chutList}
                         </div>
                     </div>
-                    <div style={{border:"1px solid rgba(39,41,43,0.1)", justifyContent:"center"}} class="col-6">
-                        <div style={{height:"60px", border:"1px solid rgba(39,41,43,0.1)", justifyContent: "center", alignContent:"center"}} class="row">
-                            <div class="col-2">
-                                <img style = {{marginLeft: "50px", width: "25px", height: "25px", borderRadius: "50%"}} src="https://picsum.photos/25/25" />
+                    <div style={{border:"1px solid rgba(39,41,43,0.1)", justifyContent:"center"}} className="col-6">
+                        <div style={{height:"60px", border:"1px solid rgba(39,41,43,0.1)", justifyContent: "center", alignContent:"center"}} className="row">
+                            <div className="col-2">
+                                <img style = {{marginLeft: "50px", width: "25px", height: "25px", borderRadius: "50%"}} src={proPic} />
                             </div>
-                            <div class="col-8">
-                                FriendName
+                            <div className="col-8">
+                                {frnd}
                             </div>
                         </div>
-                        <div style={{height:"700px", justifyContent:"center", alignContent:"center"}} class="row">ChatDisplay</div>
-                        <div style={{height:"50px", justifyContent:"center", alignContent:"center"}} class="row">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Type your message..." aria-label="Recipient's username" aria-describedby="button-addon2" />
-                                <button class="btn btn-outline-primary" type="button" id="button-addon2">Send</button>
+                        <div style={{overflowY: "auto", height:"700px", justifyContent:"center", alignContent:"center"}} className="row">{chatMessages.map((txt, index) => <p key={index}>{txt}</p>)}</div>
+                        <div style={{height:"50px", justifyContent:"center", alignContent:"center"}} className="row">
+                            <div className="input-group mb-3">
+                                <input id="inputMessage" type="text" className="form-control" placeholder="Type your message..." aria-label="Recipient's username" aria-describedby="button-addon2" />
+                                <button className="btn btn-outline-primary" type="button" id="button-addon2" onClick={()=>sendMessage()}>Send</button>
                             </div>
                         </div>
                     </div>

@@ -17,7 +17,10 @@ export default function UserChat() {
             if(following.length==0){
                 var docRef = db.collection('usersData').doc(authUser.displayName)
                 docRef.get().then((dc) => {
-                    setFollowing(dc.data().following)
+                    const followers =dc.data().followers
+                    const following =dc.data().following
+                    const temp = [...followers, ...following]
+                    setFollowing(temp)
                 })
             }
             else{
@@ -25,7 +28,7 @@ export default function UserChat() {
                     var dcRef = db.collection('usersData').doc(friend)
 
                     dcRef.get().then((doc) => {
-                        chatList.push(<FriendCard key={index} proPic={doc.data().profilePicture} friendName={friend}/>)
+                        chatList.push(<FriendCard key={index} name={friend} proPic={doc.data().profilePicture} friendName={friend}/>)
                         if(following.length==chatList.length){
                             setChutList(chatList)
                         }
