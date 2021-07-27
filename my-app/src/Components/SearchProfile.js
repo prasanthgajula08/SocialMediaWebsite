@@ -3,7 +3,7 @@ import NavBar from './NavBar'
 import fire from '../config/fire';
 import PostCard from './PostCard';
 import UserInfo from './UserInfo'
-import UserInfo2 from './userinfo2'
+import UserInfo2 from './UserInfo2'
 import '../Styles/UserProfile.css'
 
 function SearchProfile(props) {
